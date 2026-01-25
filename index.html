@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard OTP Multi - Secure Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #020617;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.5s ease-in-out;
+            overflow: hidden;
+        }
+
+        /* Latar belakang foto setelah login */
+        .bg-dashboard-active {
+            background-image: url('ops.jpg'); /* GANTI DENGAN NAMA FILE FOTO ANDA */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
+            transition: opacity 0.8s ease;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-login-white {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 1);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-top: 4px solid #0891b2;
+        }
+
+        .login-card-container {
+            width: 100%;
+            max-width: 280px;
+            padding: 20px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #0891b2;
+            margin: 0 auto 6px;
+            box-shadow: 0 4px 10px rgba(8, 145, 178, 0.2);
+        }
+
+        .input-wrapper-white {
+            background: #f1f5f9;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding: 0px 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .input-wrapper-white input {
+            width: 100%;
+            padding: 8px 6px;
+            border: none;
+            outline: none;
+            font-size: 0.85rem;
+            color: #1e293b;
+            background: transparent;
+        }
+
+        .btn-login-cyan {
+            background: #0891b2;
+            color: white;
+            font-weight: 800;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        #app-container { display: none; height: 100vh; width: 100%; flex-direction: column; z-index: 10; }
+        #app-frame { width: 100%; flex-grow: 1; border: none; background: white; }
+        .nav-glass { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="items-center justify-center p-4">
+
+    <canvas id="canvas-bg"></canvas>
+
+    <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3"></audio>
+    <audio id="sound-error" src="https://assets.mixkit.co/active_storage/sfx/2857/2857-preview.mp3"></audio>
+    <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+
+    <div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center">
+        <div class="glass-login-white login-card-container">
+            <div class="flex justify-between mb-3 px-1">
+                <span class="text-slate-500 text-[7px] font-bold uppercase" id="login-date">DATE</span>
+                <span class="text-slate-500 text-[7px] font-bold uppercase" id="login-clock">00:00:00 WIB</span>
+            </div>
+            <div class="mb-4">
+                <img src="abdul.jpg" alt="Profile" class="profile-img">
+                <h2 class="text-slate-800 font-extrabold text-base">Abdul Mudhar</h2>
+                <p class="text-slate-500 text-[8px] font-bold uppercase">UPTD SDN Margantoko 2</p>
+                <div class="w-8 h-0.5 bg-slate-200 mx-auto my-2"></div>
+                <img src="ops1.png" alt="Logo" class="w-24 mx-auto" onerror="this.src='https://via.placeholder.com/120x35?text=LOGO'">
+            </div>
+            <div class="text-left mb-3">
+                <label class="text-slate-600 text-[8px] font-black uppercase mb-1 block">Otentikasi PIN</label>
+                <div class="input-wrapper-white">
+                    <input type="password" id="admin-pass" placeholder="••••••••">
+                </div>
+                <p id="error-msg" class="text-rose-500 text-[9px] mt-1 hidden font-bold text-center">PIN SALAH!</p>
+            </div>
+            <button onclick="checkPassword()" class="btn-login-cyan shadow-lg">Login System</button>
+        </div>
+    </div>
+
+    <main id="main-menu" class="w-full max-w-md hidden relative z-10">
+        <div class="glass-card rounded-[2.5rem] p-8 border-t-8 border-cyan-600">
+            <div class="text-center mb-8">
+                <div id="main-clock" class="text-5xl font-black text-cyan-600 mb-2">00:00:00</div>
+                <p id="main-date" class="text-xs font-bold text-slate-600 uppercase tracking-widest mb-6">DATE</p>
+                <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Dashboard OTP Multi</h1>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex items-center space-x-2">
+                    <button onclick="playClick(); openLink('https://abdmudhar.github.io/bookmartotp/')" class="flex-grow flex items-center p-5 bg-white/90 rounded-2xl border border-slate-200 text-left hover:border-cyan-400 transition-all shadow-sm active:scale-95">
+                        <div class="p-3 bg-cyan-600 text-white rounded-xl font-bold">OTP</div>
+                        <div class="ml-4">
+                            <h2 class="font-bold text-slate-700">OTP Bookmarklet</h2>
+                            <p class="text-xs text-slate-500 font-medium">Inject tools ke browser</p>
+                        </div>
+                    </button>
+                    <a href="https://www.youtube.com/watch?v=AN_R2TJCKA8" target="_blank" onclick="playClick()" class="flex flex-col items-center justify-center p-3 bg-white/90 rounded-2xl border border-slate-200 min-w-[80px] shadow-sm hover:bg-slate-50 transition-colors">
+                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                        <span class="text-[9px] font-black text-slate-600 mt-1 uppercase">Tutorial</span>
+                    </a>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button onclick="playClick(); openLink('https://abdmudhar.github.io/resetotp/')" class="flex-grow flex items-center p-5 bg-white/90 rounded-2xl border border-slate-200 text-left hover:border-rose-400 transition-all shadow-sm active:scale-95">
+                        <div class="p-3 bg-rose-600 text-white rounded-xl font-bold">QR</div>
+                        <div class="ml-4">
+                            <h2 class="font-bold text-slate-700">QR Reset Tool</h2>
+                            <p class="text-xs text-slate-500 font-medium">Bypass sinkronisasi 2FA</p>
+                        </div>
+                    </button>
+                    <a href="https://www.youtube.com/watch?v=5gMnPNAFC4E" target="_blank" onclick="playClick()" class="flex flex-col items-center justify-center p-3 bg-white/90 rounded-2xl border border-slate-200 min-w-[80px] shadow-sm hover:bg-slate-50 transition-colors">
+                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                        <span class="text-[9px] font-black text-slate-600 mt-1 uppercase">Tutorial</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <nav id="top-nav" class="hidden fixed top-0 left-0 w-full bg-transparent px-6 py-4 justify-between items-center z-50">
+        <button onclick="playClick(); goBack()" class="flex items-center px-4 py-2 nav-glass text-white text-sm font-semibold rounded-xl border border-white/10">Kembali</button>
+        <div id="nav-clock" class="text-white font-mono font-bold nav-glass px-5 py-2 rounded-xl">00:00:00</div>
+        <div class="w-20"></div>
+    </nav>
+
+    <div id="app-container">
+        <iframe id="app-frame" src="" allow="clipboard-write"></iframe>
+    </div>
+
+    <script>
+        const PIN_ADMIN = "opswilone";
+        const soundSuccess = document.getElementById('sound-success');
+        const soundError = document.getElementById('sound-error');
+        const soundClick = document.getElementById('sound-click');
+
+        function playClick() { soundClick.currentTime = 0; soundClick.play(); }
+
+        function checkPassword() {
+            const input = document.getElementById('admin-pass').value;
+            if(input === PIN_ADMIN) {
+                soundSuccess.play();
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('main-menu').classList.remove('hidden');
+                
+                // AKTIFKAN BACKGROUND FOTO
+                document.body.classList.add('bg-dashboard-active');
+                document.getElementById('canvas-bg').style.opacity = '0.2';
+            } else {
+                soundError.play();
+                document.getElementById('error-msg').classList.remove('hidden');
+                document.getElementById('admin-pass').value = '';
+            }
+        }
+
+        // Script Particle Background
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(34, 211, 238, 0.4)'; ctx.fill();
+            }
+        }
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.update(); p.draw();
+                for (let j = index + 1; j < particles.length; j++) {
+                    const dx = p.x - particles[j].x; const dy = p.y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.beginPath(); ctx.strokeStyle = `rgba(34, 211, 238, ${0.8 - dist / 150})`;
+                        ctx.lineWidth = 0.5; ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Fungsi Update Jam dan Tanggal
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('id-ID', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
+            
+            // Format Hari dan Tanggal Lengkap
+            const dayStr = now.toLocaleDateString('id-ID', { weekday: 'long' });
+            const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+            const fullDate = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+            document.getElementById('login-date').textContent = dayStr + ", " + dateStr;
+            document.getElementById('login-clock').textContent = timeStr + " WIB";
+            document.getElementById('main-clock').textContent = timeStr;
+            document.getElementById('nav-clock').textContent = timeStr;
+            document.getElementById('main-date').textContent = fullDate.toUpperCase();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function openLink(url) {
+            document.getElementById('main-menu').classList.add('hidden');
+            document.getElementById('app-container').style.display = 'flex';
+            document.getElementById('top-nav').classList.replace('hidden', 'flex');
+            document.getElementById('app-frame').src = url;
+            canvas.style.display = 'none';
+            document.body.classList.remove('bg-dashboard-active');
+        }
+
+        function goBack() {
+            document.getElementById('app-container').style.display = 'none';
+            document.getElementById('top-nav').classList.replace('flex', 'hidden');
+            document.getElementById('main-menu').classList.remove('hidden');
+            document.getElementById('app-frame').src = "";
+            canvas.style.display = 'block';
+            document.body.classList.add('bg-dashboard-active');
+        }
+        
+        document.getElementById('admin-pass').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
+    </script>
+</body>
+</html>
