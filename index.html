@@ -20,7 +20,7 @@
 
         /* Latar belakang foto setelah login */
         .bg-dashboard-active {
-            background-image: url('ops.jpg'); /* GANTI DENGAN NAMA FILE FOTO ANDA */
+            background-image: url('ops.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -121,7 +121,7 @@
     <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
 
     <div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center">
-        <div class="glass-login-white login-card-container">
+        <div id="login-card" class="glass-login-white login-card-container">
             <div class="flex justify-between mb-3 px-1">
                 <span class="text-slate-500 text-[7px] font-bold uppercase" id="login-date">DATE</span>
                 <span class="text-slate-500 text-[7px] font-bold uppercase" id="login-clock">00:00:00 WIB</span>
@@ -199,10 +199,36 @@
     </div>
 
     <script>
+        // --- KONFIGURASI MAINTENANCE ---
+        const MAINTENANCE_MODE = true; // Ubah ke true untuk mengaktifkan
+        
         const PIN_ADMIN = "opswilone";
         const soundSuccess = document.getElementById('sound-success');
         const soundError = document.getElementById('sound-error');
         const soundClick = document.getElementById('sound-click');
+
+        // Fungsi Cek Maintenance Saat Load
+        function checkMaintenance() {
+            if (MAINTENANCE_MODE) {
+                document.getElementById('login-overlay').innerHTML = `
+                    <div class="glass-login-white login-card-container border-t-4 border-rose-500">
+                        <div class="py-10 px-4">
+                            <div class="text-rose-500 mb-4 animate-pulse">
+                                <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                </svg>
+                            </div>
+                            <h2 class="text-slate-800 font-black text-xl uppercase tracking-tighter italic">System Maintenance</h2>
+                            <div class="w-10 h-0.5 bg-slate-200 mx-auto my-3"></div>
+                            <p class="text-slate-500 text-[9px] font-bold leading-relaxed uppercase">
+                                Mohon maaf, saat ini sistem sedang dalam pemeliharaan rutin.<br>Silakan coba beberapa saat lagi.
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        window.onload = checkMaintenance;
 
         function playClick() { soundClick.currentTime = 0; soundClick.play(); }
 
@@ -213,7 +239,6 @@
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('main-menu').classList.remove('hidden');
                 
-                // AKTIFKAN BACKGROUND FOTO
                 document.body.classList.add('bg-dashboard-active');
                 document.getElementById('canvas-bg').style.opacity = '0.2';
             } else {
@@ -266,18 +291,15 @@
         }
         animate();
 
-        // Fungsi Update Jam dan Tanggal
         function updateClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('id-ID', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
-            
-            // Format Hari dan Tanggal Lengkap
             const dayStr = now.toLocaleDateString('id-ID', { weekday: 'long' });
             const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
             const fullDate = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
-            document.getElementById('login-date').textContent = dayStr + ", " + dateStr;
-            document.getElementById('login-clock').textContent = timeStr + " WIB";
+            if(document.getElementById('login-date')) document.getElementById('login-date').textContent = dayStr + ", " + dateStr;
+            if(document.getElementById('login-clock')) document.getElementById('login-clock').textContent = timeStr + " WIB";
             document.getElementById('main-clock').textContent = timeStr;
             document.getElementById('nav-clock').textContent = timeStr;
             document.getElementById('main-date').textContent = fullDate.toUpperCase();
