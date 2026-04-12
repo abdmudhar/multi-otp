@@ -206,28 +206,32 @@
         import { getDatabase, ref, get, child, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
-  apiKey: "AIzaSyAEATGhio2xpxuK1y09lY7gaaN5eVlVzV0",
-  authDomain: "otp-multi.firebaseapp.com",
-  databaseURL: "https://otp-multi-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "otp-multi",
-  storageBucket: "otp-multi.firebasestorage.app",
-  messagingSenderId: "206567986298",
-  appId: "1:206567986298:web:08f3f3c88468b9c8b2d7c3",
-  measurementId: "G-EL4LWEWZFB"
+            apiKey: "AIzaSyAEATGhio2xpxuK1y09lY7gaaN5eVlVzV0",
+            authDomain: "otp-multi.firebaseapp.com",
+            databaseURL: "https://otp-multi-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "otp-multi",
+            storageBucket: "otp-multi.firebasestorage.app",
+            messagingSenderId: "206567986298",
+            appId: "1:206567986298:web:08f3f3c88468b9c8b2d7c3",
+            measurementId: "G-EL4LWEWZFB"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // Backup konten asli login
+        const loginContent = document.getElementById('login-content');
+        const originalLoginHTML = loginContent.innerHTML;
+
         // --- SISTEM MAINTENANCE MODE (REALTIME) ---
         const maintenanceRef = ref(db, 'config/is_maintenance');
+        
         onValue(maintenanceRef, (snapshot) => {
             const isMaintenance = snapshot.val();
-            const loginContent = document.getElementById('login-content');
             
             if (isMaintenance === true) {
                 loginContent.innerHTML = `
-                    <div class="py-10 px-4 border-t-4 border-rose-500 rounded-xl">
+                    <div class="py-10 px-4">
                         <div class="text-rose-500 mb-4 animate-bounce">
                             <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
@@ -241,12 +245,18 @@
                     </div>
                 `;
             } else {
-                // Refresh halaman jika maintenance dimatikan agar form login kembali
-                if (window.isFirstLoad === false) { location.reload(); }
+                // Kembalikan ke tampilan login normal
+                loginContent.innerHTML = originalLoginHTML;
+                // Sangat penting: re-attach event listener Enter karena elemen input di-render ulang
+                setTimeout(() => {
+                    const inputPin = document.getElementById('admin-pass');
+                    if(inputPin) {
+                        inputPin.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
+                    }
+                    updateClock(); // Update jam di tampilan login
+                }, 100);
             }
-            window.isFirstLoad = false;
         });
-        window.isFirstLoad = true;
 
         // --- SISTEM LOGIN ---
         window.checkPassword = async function() {
@@ -262,7 +272,7 @@
                 const dbRef = ref(db);
                 const snapshot = await get(child(dbRef, `config/admin_pin`));
                 
-                if (snapshot.exists() && input === snapshot.val()) {
+                if (snapshot.exists() && input === snapshot.val().toString()) {
                     document.getElementById('sound-success').play();
                     document.getElementById('login-overlay').style.display = 'none';
                     document.getElementById('main-menu').classList.remove('hidden');
@@ -283,7 +293,7 @@
     </script>
 
     <script>
-        // --- SCRIPT UI SEBELUMNYA (TIDAK BERUBAH) ---
+        // UI Logic (Clock, Canvas, Navigation)
         const soundClick = document.getElementById('sound-click');
         function playClick() { soundClick.currentTime = 0; soundClick.play(); }
 
@@ -293,6 +303,7 @@
         function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', initCanvas);
         initCanvas();
+
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -338,9 +349,9 @@
 
             if(document.getElementById('login-date')) document.getElementById('login-date').textContent = dayStr + ", " + dateStr;
             if(document.getElementById('login-clock')) document.getElementById('login-clock').textContent = timeStr + " WIB";
-            document.getElementById('main-clock').textContent = timeStr;
-            document.getElementById('nav-clock').textContent = timeStr;
-            document.getElementById('main-date').textContent = fullDate.toUpperCase();
+            if(document.getElementById('main-clock')) document.getElementById('main-clock').textContent = timeStr;
+            if(document.getElementById('nav-clock')) document.getElementById('nav-clock').textContent = timeStr;
+            if(document.getElementById('main-date')) document.getElementById('main-date').textContent = fullDate.toUpperCase();
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -362,8 +373,6 @@
             canvas.style.display = 'block';
             document.body.classList.add('bg-dashboard-active');
         }
-        
-        document.getElementById('admin-pass').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
     </script>
 </body>
 </html>
