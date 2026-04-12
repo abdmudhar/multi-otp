@@ -24,7 +24,7 @@
             inset: 0;
             background: #f8fafc;
             z-index: 9999;
-            display: none; 
+            display: none; /* Diatur via JS */
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -63,6 +63,7 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
+        /* ---------------------------------- */
 
         .bg-dashboard-active {
             background-image: url('ops.jpg'); 
@@ -169,7 +170,7 @@
             </div>
             <h1 class="text-2xl font-extrabold text-slate-800 mb-2">Pembaruan Sistem<br>(Maintenance)</h1>
             <p class="text-slate-500 text-sm leading-relaxed mb-6">
-                Mohon maaf, aplikasi <strong>OTP Multi</strong> saat ini sedang dalam proses pemeliharaan.
+                Mohon maaf, aplikasi <strong>OTP Multi</strong> saat ini sedang dalam proses pemeliharaan dan penambahan fitur baru.
             </p>
             <p class="text-slate-600 text-xs font-bold uppercase tracking-widest">Silakan kembali lagi nanti.</p>
         </div>
@@ -214,20 +215,37 @@
             </div>
 
             <div class="space-y-4">
-                <button onclick="playClick(); openLink('https://abdmudhar.github.io/bookmartotp/')" class="w-full flex items-center p-5 bg-white/90 rounded-2xl border border-slate-200 text-left hover:border-cyan-400 transition-all shadow-sm active:scale-95">
-                    <div class="p-3 bg-cyan-600 text-white rounded-xl font-bold">OTP</div>
-                    <div class="ml-4">
-                        <h2 class="font-bold text-slate-700">OTP Bookmarklet</h2>
-                        <p class="text-xs text-slate-500 font-medium">Inject tools ke browser</p>
-                    </div>
-                </button>
-                <button onclick="playClick(); openLink('https://abdmudhar.github.io/resetotp/')" class="w-full flex items-center p-5 bg-white/90 rounded-2xl border border-slate-200 text-left hover:border-rose-400 transition-all shadow-sm active:scale-95">
-                    <div class="p-3 bg-rose-600 text-white rounded-xl font-bold">QR</div>
-                    <div class="ml-4">
-                        <h2 class="font-bold text-slate-700">QR Reset Tool</h2>
-                        <p class="text-xs text-slate-500 font-medium">Bypass sinkronisasi 2FA</p>
-                    </div>
-                </button>
+                <div class="flex items-center space-x-2">
+                    <button onclick="playClick(); openLink('https://abdmudhar.github.io/bookmartotp/')" class="flex-grow flex items-center p-5 bg-white/90 rounded-2xl border border-slate-200 text-left hover:border-cyan-400 transition-all shadow-sm active:scale-95">
+                        <div class="p-3 bg-cyan-600 text-white rounded-xl font-bold">OTP</div>
+                        <div class="ml-4">
+                            <h2 class="font-bold text-slate-700">OTP Bookmarklet</h2>
+                            <p class="text-xs text-slate-500 font-medium">Inject tools ke browser</p>
+                        </div>
+                    </button>
+                    <a href="https://www.youtube.com/watch?v=AN_R2TJCKA8" target="_blank" onclick="playClick()" class="flex flex-col items-center justify-center p-3 bg-white/90 rounded-2xl border border-slate-200 min-w-[80px] shadow-sm hover:bg-slate-50 transition-colors">
+                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                        <span class="text-[9px] font-black text-slate-600 mt-1 uppercase">Tutorial</span>
+                    </a>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button onclick="playClick(); openLink('https://abdmudhar.github.io/resetotp/')" class="flex-grow flex items-center p-5 bg-white/90 rounded-2xl border border-slate-200 text-left hover:border-rose-400 transition-all shadow-sm active:scale-95">
+                        <div class="p-3 bg-rose-600 text-white rounded-xl font-bold">QR</div>
+                        <div class="ml-4">
+                            <h2 class="font-bold text-slate-700">QR Reset Tool</h2>
+                            <p class="text-xs text-slate-500 font-medium">Bypass sinkronisasi 2FA</p>
+                        </div>
+                    </button>
+                    <a href="https://www.youtube.com/watch?v=5gMnPNAFC4E" target="_blank" onclick="playClick()" class="flex flex-col items-center justify-center p-3 bg-white/90 rounded-2xl border border-slate-200 min-w-[80px] shadow-sm hover:bg-slate-50 transition-colors">
+                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                        <span class="text-[9px] font-black text-slate-600 mt-1 uppercase">Tutorial</span>
+                    </a>
+                </div>
             </div>
         </div>
     </main>
@@ -243,56 +261,30 @@
     </div>
 
     <script>
-        // ================= SISTEM DINAMIS SETTINGS =================
-        let currentPin = localStorage.getItem('adminPin') || "opswilone"; //
-
-        function checkSystemStatus() {
-            const isMaint = localStorage.getItem('isMaintenance') === 'true'; //
-            const maintScreen = document.getElementById('maintenance-screen');
-            const loginOverlay = document.getElementById('login-overlay');
-
-            if (isMaint) {
-                maintScreen.style.display = 'flex';
-                loginOverlay.style.display = 'none';
-            } else {
-                maintScreen.style.display = 'none';
-                if(document.getElementById('main-menu').classList.contains('hidden')) {
-                    loginOverlay.style.display = 'flex';
-                }
-            }
-        }
-
-        // Pantau perubahan dari file admin.html secara Real-Time
-        window.addEventListener('storage', () => {
-            currentPin = localStorage.getItem('adminPin') || "opswilone";
-            checkSystemStatus();
-        });
-
-        // Fitur Buka Panel Admin (Klik 5x di pojok kanan bawah)
-        let clicks = 0;
-        window.addEventListener('click', (e) => {
-            if(e.clientX > window.innerWidth - 100 && e.clientY > window.innerHeight - 100) {
-                clicks++;
-                if(clicks >= 5) {
-                    window.open('admin.html', '_blank', 'width=400,height=600');
-                    clicks = 0;
-                }
-                setTimeout(() => clicks = 0, 2000);
-            }
-        });
+        // ================= CONFIGURATION =================
+        const MAINTENANCE_MODE = false; // GANTI KE false UNTUK MEMBUKA AKSES
+        const PIN_ADMIN = "opswilone";
+        // =================================================
 
         const soundSuccess = document.getElementById('sound-success');
         const soundError = document.getElementById('sound-error');
         const soundClick = document.getElementById('sound-click');
 
+        // Logic Maintenance Awal
+        if (MAINTENANCE_MODE) {
+            document.getElementById('maintenance-screen').style.display = 'flex';
+            document.getElementById('login-overlay').style.display = 'none';
+        }
+
         function playClick() { soundClick.currentTime = 0; soundClick.play(); }
 
         function checkPassword() {
             const input = document.getElementById('admin-pass').value;
-            if(input === currentPin) { // Pakai PIN dinamis
+            if(input === PIN_ADMIN) {
                 soundSuccess.play();
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('main-menu').classList.remove('hidden');
+                
                 document.body.classList.add('bg-dashboard-active');
                 document.getElementById('canvas-bg').style.opacity = '0.2';
             } else {
@@ -329,8 +321,8 @@
         }
         for (let i = 0; i < 80; i++) particles.push(new Particle());
         function animate() {
-            const isMaint = localStorage.getItem('isMaintenance') === 'true';
-            if (!isMaint) {
+            // Animasi tetap berjalan tapi partikel disembunyikan jika maintenance aktif
+            if (!MAINTENANCE_MODE) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach((p, index) => {
                     p.update(); p.draw();
@@ -351,6 +343,7 @@
         function updateClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('id-ID', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
+            
             const dayStr = now.toLocaleDateString('id-ID', { weekday: 'long' });
             const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
             const fullDate = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -383,9 +376,6 @@
         }
         
         document.getElementById('admin-pass').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
-        
-        // Mulai aplikasi
-        checkSystemStatus();
     </script>
 </body>
 </html>
