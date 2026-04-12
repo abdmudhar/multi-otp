@@ -18,13 +18,13 @@
             overflow: hidden;
         }
 
-        /* Tampilan Maintenance */
+        /* --- TAMPILAN MAINTENANCE BARU (CYBER GLASS) --- */
         #maintenance-screen {
             position: fixed;
             inset: 0;
-            background: #020617;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
             z-index: 9999;
-            display: none; /* Default sembunyi */
+            display: none; 
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -32,35 +32,77 @@
             color: white;
         }
 
-        .maintenance-loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #1e293b;
-            border-top: 5px solid #0891b2;
+        .maint-container {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 2rem;
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            max-width: 320px;
+            width: 90%;
+        }
+
+        .gear-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .gear-icon {
+            font-size: 3.5rem;
+            animation: spin 4s linear infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 15px rgba(8, 145, 178, 0.6));
+        }
+
+        .pulse-dot {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 12px;
+            height: 12px;
+            background: #0891b2;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            box-shadow: 0 0 0 0 rgba(8, 145, 178, 0.7);
+            animation: pulse-blue 2s infinite;
+        }
+
+        @keyframes pulse-blue {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(8, 145, 178, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(8, 145, 178, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(8, 145, 178, 0); }
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, #94a3b8, #f8fafc, #94a3b8);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* Latar belakang foto setelah login */
+        /* --- STYLE DASHBOARD ASLI --- */
         .bg-dashboard-active {
             background-image: url('ops.jpg'); 
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
         }
 
         #canvas-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
             transition: opacity 0.8s ease;
@@ -69,7 +111,6 @@
         .glass-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
@@ -77,7 +118,6 @@
         .glass-login-white {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 1);
             border-radius: 20px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
@@ -85,55 +125,28 @@
         }
 
         .login-card-container {
-            width: 100%;
-            max-width: 280px;
-            padding: 20px 20px;
-            text-align: center;
-            position: relative;
+            width: 100%; max-width: 280px; padding: 20px; text-align: center;
         }
 
         .profile-img {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #0891b2;
-            margin: 0 auto 6px;
-            box-shadow: 0 4px 10px rgba(8, 145, 178, 0.2);
+            width: 65px; height: 65px; border-radius: 50%; object-fit: cover;
+            border: 2px solid #0891b2; margin: 0 auto 6px;
         }
 
         .input-wrapper-white {
-            background: #f1f5f9;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            padding: 0px 12px;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s;
+            background: #f1f5f9; border-radius: 10px; display: flex;
+            align-items: center; padding: 0px 12px; border: 1px solid #e2e8f0;
         }
 
         .input-wrapper-white input {
-            width: 100%;
-            padding: 8px 6px;
-            border: none;
-            outline: none;
-            font-size: 0.85rem;
-            color: #1e293b;
-            background: transparent;
+            width: 100%; padding: 8px 6px; border: none; outline: none;
+            font-size: 0.85rem; color: #1e293b; background: transparent;
         }
 
         .btn-login-cyan {
-            background: #0891b2;
-            color: white;
-            font-weight: 800;
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            margin-top: 15px;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            transition: all 0.3s;
+            background: #0891b2; color: white; font-weight: 800; width: 100%;
+            padding: 10px; border-radius: 10px; margin-top: 15px;
+            text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;
         }
 
         #app-container { display: none; height: 100vh; width: 100%; flex-direction: column; z-index: 10; }
@@ -144,9 +157,27 @@
 <body class="items-center justify-center p-4">
 
     <div id="maintenance-screen">
-        <div class="maintenance-loader"></div>
-        <h1 class="text-2xl font-black tracking-tighter">SISTEM SEDANG DIPERBAIKI</h1>
-        <p class="text-slate-500 text-[10px] uppercase tracking-[0.2em] mt-2">Mohon maaf atas ketidaknyamanannya. <br> Kami akan segera kembali.</p>
+        <div class="maint-container">
+            <div class="gear-container">
+                <span class="gear-icon">⚙️</span>
+                <div class="pulse-dot"></div>
+            </div>
+            
+            <h1 class="text-2xl font-black tracking-tighter shimmer mb-1">SYSTEM UPGRADE</h1>
+            <div class="w-12 h-1 bg-cyan-600 mx-auto mb-4 rounded-full"></div>
+            
+            <p class="text-slate-300 text-[11px] font-medium leading-relaxed uppercase tracking-wider">
+                Mohon maaf, sistem sedang dalam <br> optimalisasi rutin.
+            </p>
+            
+            <div class="mt-6 flex items-center justify-center space-x-2">
+                <span class="flex h-1.5 w-1.5 rounded-full bg-cyan-500"></span>
+                <span class="text-[8px] text-slate-500 uppercase tracking-[0.2em] font-bold">Status: Offline</span>
+            </div>
+        </div>
+        <p class="absolute bottom-8 text-slate-600 text-[8px] uppercase tracking-[0.3em]">
+            &copy; 2026 Admin Panel • Secure Protocol
+        </p>
     </div>
 
     <canvas id="canvas-bg"></canvas>
@@ -196,10 +227,8 @@
                             <p class="text-xs text-slate-500 font-medium">Inject tools ke browser</p>
                         </div>
                     </button>
-                    <a href="https://www.youtube.com/watch?v=AN_R2TJCKA8" target="_blank" onclick="playClick()" class="flex flex-col items-center justify-center p-3 bg-white/90 rounded-2xl border border-slate-200 min-w-[80px] shadow-sm hover:bg-slate-50 transition-colors">
-                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                        </svg>
+                    <a href="https://www.youtube.com/watch?v=AN_R2TJCKA8" target="_blank" onclick="playClick()" class="flex flex-col items-center justify-center p-3 bg-white/90 rounded-2xl border border-slate-200 min-w-[80px] shadow-sm">
+                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
                         <span class="text-[9px] font-black text-slate-600 mt-1 uppercase">Tutorial</span>
                     </a>
                 </div>
@@ -212,10 +241,8 @@
                             <p class="text-xs text-slate-500 font-medium">Bypass sinkronisasi 2FA</p>
                         </div>
                     </button>
-                    <a href="https://www.youtube.com/watch?v=5gMnPNAFC4E" target="_blank" onclick="playClick()" class="flex flex-col items-center justify-center p-3 bg-white/90 rounded-2xl border border-slate-200 min-w-[80px] shadow-sm hover:bg-slate-50 transition-colors">
-                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                        </svg>
+                    <a href="https://www.youtube.com/watch?v=5gMnPNAFC4E" target="_blank" onclick="playClick()" class="flex flex-col items-center justify-center p-3 bg-white/90 rounded-2xl border border-slate-200 min-w-[80px] shadow-sm">
+                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
                         <span class="text-[9px] font-black text-slate-600 mt-1 uppercase">Tutorial</span>
                     </a>
                 </div>
@@ -239,7 +266,6 @@
         const PIN_ADMIN = "opswilone";
         // =================================================
 
-        // Periksa Maintenance saat Load
         if (MAINTENANCE_MODE) {
             document.getElementById('maintenance-screen').style.display = 'flex';
             document.getElementById('login-overlay').style.display = 'none';
@@ -257,8 +283,6 @@
                 soundSuccess.play();
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('main-menu').classList.remove('hidden');
-                
-                // AKTIFKAN BACKGROUND FOTO
                 document.body.classList.add('bg-dashboard-active');
                 document.getElementById('canvas-bg').style.opacity = '0.2';
             } else {
@@ -268,7 +292,7 @@
             }
         }
 
-        // Script Particle Background
+        // Particle Background
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -295,29 +319,29 @@
         }
         for (let i = 0; i < 80; i++) particles.push(new Particle());
         function animate() {
-            if (MAINTENANCE_MODE) return; // Stop animasi jika maintenance
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, index) => {
-                p.update(); p.draw();
-                for (let j = index + 1; j < particles.length; j++) {
-                    const dx = p.x - particles[j].x; const dy = p.y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 150) {
-                        ctx.beginPath(); ctx.strokeStyle = `rgba(34, 211, 238, ${0.8 - dist / 150})`;
-                        ctx.lineWidth = 0.5; ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+            if (MAINTENANCE_MODE) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height); // Bersihkan canvas saat maint agar tidak berat
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, index) => {
+                    p.update(); p.draw();
+                    for (let j = index + 1; j < particles.length; j++) {
+                        const dx = p.x - particles[j].x; const dy = p.y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 150) {
+                            ctx.beginPath(); ctx.strokeStyle = `rgba(34, 211, 238, ${0.8 - dist / 150})`;
+                            ctx.lineWidth = 0.5; ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+                        }
                     }
-                }
-            });
+                });
+            }
             requestAnimationFrame(animate);
         }
         animate();
 
-        // Fungsi Update Jam dan Tanggal
         function updateClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('id-ID', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
-            
-            // Format Hari dan Tanggal Lengkap
             const dayStr = now.toLocaleDateString('id-ID', { weekday: 'long' });
             const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
             const fullDate = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
