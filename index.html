@@ -18,99 +18,66 @@
             overflow: hidden;
         }
 
-        /* =========================================
-           DESAIN MAINTENANCE BARU (CYBER-GLASS)
-        ========================================= */
+        /* --- STYLE HALAMAN MAINTENANCE --- */
         #maintenance-screen {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            background: #f8fafc;
             z-index: 9999;
-            display: none; /* Ubah via JS atau config di bawah */
+            display: none; /* Diatur via JS */
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            color: white;
+            padding: 20px;
         }
 
-        .maint-container {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .maint-card {
+            background: white;
             padding: 3rem 2rem;
-            border-radius: 2.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-            max-width: 320px;
-            width: 90%;
-            position: relative;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            max-width: 450px;
+            width: 100%;
         }
 
-        /* Animasi Gear Melayang */
-        .gear-container {
-            position: relative;
+        .maint-icon-bg {
             width: 80px;
             height: 80px;
+            background: #eff6ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin: 0 auto 1.5rem;
         }
 
-        .gear-icon {
-            font-size: 3.5rem;
-            animation: spin 4s linear infinite;
-            display: inline-block;
-            filter: drop-shadow(0 0 15px rgba(8, 145, 178, 0.6));
+        .maint-icon {
+            width: 40px;
+            height: 40px;
+            color: #2563eb;
+            animation: float 3s ease-in-out infinite;
         }
 
-        /* Indikator Titik Berdenyut */
-        .pulse-dot {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            width: 12px;
-            height: 12px;
-            background: #0891b2;
-            border-radius: 50%;
-            box-shadow: 0 0 0 0 rgba(8, 145, 178, 0.7);
-            animation: pulse-blue 2s infinite;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
+        /* ---------------------------------- */
 
-        @keyframes pulse-blue {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(8, 145, 178, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 12px rgba(8, 145, 178, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(8, 145, 178, 0); }
-        }
-
-        /* Efek Teks Berkilau */
-        .shimmer {
-            background: linear-gradient(90deg, #94a3b8, #f8fafc, #94a3b8);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
-        }
-
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* =========================================
-           STYLE DASHBOARD ASLI (DIPERTAHANKAN)
-        ========================================= */
         .bg-dashboard-active {
             background-image: url('ops.jpg'); 
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
         }
 
         #canvas-bg {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: -1;
             background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
             transition: opacity 0.8s ease;
@@ -119,6 +86,7 @@
         .glass-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
@@ -126,23 +94,63 @@
         .glass-login-white {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 1);
             border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
             border-top: 4px solid #0891b2;
         }
 
         .login-card-container {
-            width: 100%; max-width: 280px; padding: 20px; text-align: center;
+            width: 100%;
+            max-width: 280px;
+            padding: 20px 20px;
+            text-align: center;
+            position: relative;
         }
 
         .profile-img {
-            width: 65px; height: 65px; border-radius: 50%; object-fit: cover;
-            border: 2px solid #0891b2; margin: 0 auto 6px;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #0891b2;
+            margin: 0 auto 6px;
+            box-shadow: 0 4px 10px rgba(8, 145, 178, 0.2);
+        }
+
+        .input-wrapper-white {
+            background: #f1f5f9;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding: 0px 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .input-wrapper-white input {
+            width: 100%;
+            padding: 8px 6px;
+            border: none;
+            outline: none;
+            font-size: 0.85rem;
+            color: #1e293b;
+            background: transparent;
         }
 
         .btn-login-cyan {
-            background: #0891b2; color: white; font-weight: 800; width: 100%;
-            padding: 10px; border-radius: 10px; margin-top: 15px;
-            text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;
+            background: #0891b2;
+            color: white;
+            font-weight: 800;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
         }
 
         #app-container { display: none; height: 100vh; width: 100%; flex-direction: column; z-index: 10; }
@@ -153,28 +161,19 @@
 <body class="items-center justify-center p-4">
 
     <div id="maintenance-screen">
-        <div class="maint-container">
-            <div class="gear-container">
-                <span class="gear-icon">⚙️</span>
-                <div class="pulse-dot"></div>
+        <div class="maint-card">
+            <div class="maint-icon-bg">
+                <svg class="maint-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
             </div>
-            
-            <h1 class="text-2xl font-black tracking-tighter shimmer mb-1">SYSTEM UPGRADE</h1>
-            <div class="w-12 h-1 bg-cyan-600 mx-auto mb-5 rounded-full"></div>
-            
-            <p class="text-slate-300 text-[11px] font-medium leading-relaxed uppercase tracking-widest">
-                Kami sedang mengoptimalkan <br> sistem untuk Anda.
+            <h1 class="text-2xl font-extrabold text-slate-800 mb-2">Pembaruan Sistem<br>(Maintenance)</h1>
+            <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                Mohon maaf, aplikasi <strong>OTP Multi</strong> saat ini sedang dalam proses pemeliharaan dan penambahan fitur baru.
             </p>
-            
-            <div class="mt-8 flex items-center justify-center space-x-2">
-                <span class="flex h-1.5 w-1.5 rounded-full bg-cyan-500"></span>
-                <span class="text-[8px] text-slate-500 uppercase tracking-[0.2em] font-bold">Status: Under Maintenance</span>
-            </div>
+            <p class="text-slate-600 text-xs font-bold uppercase tracking-widest">Silakan kembali lagi nanti.</p>
         </div>
-        
-        <p class="absolute bottom-10 text-slate-600 text-[8px] uppercase tracking-[0.4em] font-bold">
-            &copy; 2026 Admin Panel • Security Protocol Active
-        </p>
     </div>
 
     <canvas id="canvas-bg"></canvas>
@@ -198,8 +197,8 @@
             </div>
             <div class="text-left mb-3">
                 <label class="text-slate-600 text-[8px] font-black uppercase mb-1 block">Otentikasi PIN</label>
-                <div class="bg-[#f1f5f9] border border-[#e2e8f0] rounded-xl flex items-center px-3">
-                    <input type="password" id="admin-pass" placeholder="••••••••" class="w-full py-2 bg-transparent outline-none text-sm">
+                <div class="input-wrapper-white">
+                    <input type="password" id="admin-pass" placeholder="••••••••">
                 </div>
                 <p id="error-msg" class="text-rose-500 text-[9px] mt-1 hidden font-bold text-center">PIN SALAH!</p>
             </div>
@@ -208,32 +207,51 @@
     </div>
 
     <main id="main-menu" class="w-full max-w-md hidden relative z-10">
-        <div class="glass-card rounded-[2.5rem] p-8 border-t-8 border-cyan-600 text-center">
-            <div id="main-clock" class="text-5xl font-black text-cyan-600 mb-2">00:00:00</div>
-            <p id="main-date" class="text-xs font-bold text-slate-600 uppercase tracking-widest mb-6">DATE</p>
-            
-            <div class="space-y-4 text-left">
-                <button onclick="playClick(); openLink('https://abdmudhar.github.io/bookmartotp/')" class="w-full flex items-center p-5 bg-white/90 rounded-2xl border border-slate-200 hover:border-cyan-400 transition-all active:scale-95 shadow-sm">
-                    <div class="p-3 bg-cyan-600 text-white rounded-xl font-bold">OTP</div>
-                    <div class="ml-4">
-                        <h2 class="font-bold text-slate-700">OTP Bookmarklet</h2>
-                        <p class="text-xs text-slate-500">Inject tools ke browser</p>
-                    </div>
-                </button>
+        <div class="glass-card rounded-[2.5rem] p-8 border-t-8 border-cyan-600">
+            <div class="text-center mb-8">
+                <div id="main-clock" class="text-5xl font-black text-cyan-600 mb-2">00:00:00</div>
+                <p id="main-date" class="text-xs font-bold text-slate-600 uppercase tracking-widest mb-6">DATE</p>
+                <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Dashboard OTP Multi</h1>
+            </div>
 
-                <button onclick="playClick(); openLink('https://abdmudhar.github.io/resetotp/')" class="w-full flex items-center p-5 bg-white/90 rounded-2xl border border-slate-200 hover:border-rose-400 transition-all active:scale-95 shadow-sm">
-                    <div class="p-3 bg-rose-600 text-white rounded-xl font-bold">QR</div>
-                    <div class="ml-4">
-                        <h2 class="font-bold text-slate-700">QR Reset Tool</h2>
-                        <p class="text-xs text-slate-500">Bypass sinkronisasi 2FA</p>
-                    </div>
-                </button>
+            <div class="space-y-4">
+                <div class="flex items-center space-x-2">
+                    <button onclick="playClick(); openLink('https://abdmudhar.github.io/bookmartotp/')" class="flex-grow flex items-center p-5 bg-white/90 rounded-2xl border border-slate-200 text-left hover:border-cyan-400 transition-all shadow-sm active:scale-95">
+                        <div class="p-3 bg-cyan-600 text-white rounded-xl font-bold">OTP</div>
+                        <div class="ml-4">
+                            <h2 class="font-bold text-slate-700">OTP Bookmarklet</h2>
+                            <p class="text-xs text-slate-500 font-medium">Inject tools ke browser</p>
+                        </div>
+                    </button>
+                    <a href="https://www.youtube.com/watch?v=AN_R2TJCKA8" target="_blank" onclick="playClick()" class="flex flex-col items-center justify-center p-3 bg-white/90 rounded-2xl border border-slate-200 min-w-[80px] shadow-sm hover:bg-slate-50 transition-colors">
+                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                        <span class="text-[9px] font-black text-slate-600 mt-1 uppercase">Tutorial</span>
+                    </a>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button onclick="playClick(); openLink('https://abdmudhar.github.io/resetotp/')" class="flex-grow flex items-center p-5 bg-white/90 rounded-2xl border border-slate-200 text-left hover:border-rose-400 transition-all shadow-sm active:scale-95">
+                        <div class="p-3 bg-rose-600 text-white rounded-xl font-bold">QR</div>
+                        <div class="ml-4">
+                            <h2 class="font-bold text-slate-700">QR Reset Tool</h2>
+                            <p class="text-xs text-slate-500 font-medium">Bypass sinkronisasi 2FA</p>
+                        </div>
+                    </button>
+                    <a href="https://www.youtube.com/watch?v=5gMnPNAFC4E" target="_blank" onclick="playClick()" class="flex flex-col items-center justify-center p-3 bg-white/90 rounded-2xl border border-slate-200 min-w-[80px] shadow-sm hover:bg-slate-50 transition-colors">
+                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                        <span class="text-[9px] font-black text-slate-600 mt-1 uppercase">Tutorial</span>
+                    </a>
+                </div>
             </div>
         </div>
     </main>
 
     <nav id="top-nav" class="hidden fixed top-0 left-0 w-full bg-transparent px-6 py-4 justify-between items-center z-50">
-        <button onclick="playClick(); goBack()" class="px-4 py-2 nav-glass text-white text-sm font-semibold rounded-xl border border-white/10">Kembali</button>
+        <button onclick="playClick(); goBack()" class="flex items-center px-4 py-2 nav-glass text-white text-sm font-semibold rounded-xl border border-white/10">Kembali</button>
         <div id="nav-clock" class="text-white font-mono font-bold nav-glass px-5 py-2 rounded-xl">00:00:00</div>
         <div class="w-20"></div>
     </nav>
@@ -243,20 +261,20 @@
     </div>
 
     <script>
-        /* =========================================
-           KONFIGURASI UTAMA
-        ========================================= */
-        const MAINTENANCE_MODE = true; // UBAH KE true UNTUK MENGAKTIFKAN MAINTENANCE
+        // ================= CONFIGURATION =================
+        const MAINTENANCE_MODE = true; // GANTI KE false UNTUK MEMBUKA AKSES
         const PIN_ADMIN = "opswilone";
-
-        if (MAINTENANCE_MODE) {
-            document.getElementById('maintenance-screen').style.display = 'flex';
-            document.getElementById('login-overlay').style.display = 'none';
-        }
+        // =================================================
 
         const soundSuccess = document.getElementById('sound-success');
         const soundError = document.getElementById('sound-error');
         const soundClick = document.getElementById('sound-click');
+
+        // Logic Maintenance Awal
+        if (MAINTENANCE_MODE) {
+            document.getElementById('maintenance-screen').style.display = 'flex';
+            document.getElementById('login-overlay').style.display = 'none';
+        }
 
         function playClick() { soundClick.currentTime = 0; soundClick.play(); }
 
@@ -266,6 +284,7 @@
                 soundSuccess.play();
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('main-menu').classList.remove('hidden');
+                
                 document.body.classList.add('bg-dashboard-active');
                 document.getElementById('canvas-bg').style.opacity = '0.2';
             } else {
@@ -275,14 +294,13 @@
             }
         }
 
-        // Particle Background Logic
+        // Script Particle Background
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
         function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', initCanvas);
         initCanvas();
-
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -302,10 +320,10 @@
             }
         }
         for (let i = 0; i < 80; i++) particles.push(new Particle());
-
         function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (!MAINTENANCE_MODE) { // Matikan partikel di menu maintenance agar hemat baterai
+            // Animasi tetap berjalan tapi partikel disembunyikan jika maintenance aktif
+            if (!MAINTENANCE_MODE) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach((p, index) => {
                     p.update(); p.draw();
                     for (let j = index + 1; j < particles.length; j++) {
@@ -325,13 +343,16 @@
         function updateClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('id-ID', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
+            
             const dayStr = now.toLocaleDateString('id-ID', { weekday: 'long' });
             const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-            
+            const fullDate = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
             document.getElementById('login-date').textContent = dayStr + ", " + dateStr;
             document.getElementById('login-clock').textContent = timeStr + " WIB";
-            if(document.getElementById('main-clock')) document.getElementById('main-clock').textContent = timeStr;
-            if(document.getElementById('nav-clock')) document.getElementById('nav-clock').textContent = timeStr;
+            document.getElementById('main-clock').textContent = timeStr;
+            document.getElementById('nav-clock').textContent = timeStr;
+            document.getElementById('main-date').textContent = fullDate.toUpperCase();
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -342,6 +363,7 @@
             document.getElementById('top-nav').classList.replace('hidden', 'flex');
             document.getElementById('app-frame').src = url;
             canvas.style.display = 'none';
+            document.body.classList.remove('bg-dashboard-active');
         }
 
         function goBack() {
@@ -350,6 +372,7 @@
             document.getElementById('main-menu').classList.remove('hidden');
             document.getElementById('app-frame').src = "";
             canvas.style.display = 'block';
+            document.body.classList.add('bg-dashboard-active');
         }
         
         document.getElementById('admin-pass').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
