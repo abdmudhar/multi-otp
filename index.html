@@ -18,7 +18,6 @@
             overflow: hidden;
         }
 
-        /* Latar belakang foto setelah login */
         .bg-dashboard-active {
             background-image: url('ops.jpg');
             background-size: cover;
@@ -107,6 +106,8 @@
             transition: all 0.3s;
         }
 
+        .btn-login-cyan:disabled { background: #64748b; cursor: not-allowed; }
+
         #app-container { display: none; height: 100vh; width: 100%; flex-direction: column; z-index: 10; }
         #app-frame { width: 100%; flex-grow: 1; border: none; background: white; }
         .nav-glass { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); }
@@ -122,25 +123,27 @@
 
     <div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center">
         <div id="login-card" class="glass-login-white login-card-container">
-            <div class="flex justify-between mb-3 px-1">
-                <span class="text-slate-500 text-[7px] font-bold uppercase" id="login-date">DATE</span>
-                <span class="text-slate-500 text-[7px] font-bold uppercase" id="login-clock">00:00:00 WIB</span>
-            </div>
-            <div class="mb-4">
-                <img src="abdul.jpg" alt="Profile" class="profile-img">
-                <h2 class="text-slate-800 font-extrabold text-base">Abdul Mudhar</h2>
-                <p class="text-slate-500 text-[8px] font-bold uppercase">UPTD SDN Margantoko 2</p>
-                <div class="w-8 h-0.5 bg-slate-200 mx-auto my-2"></div>
-                <img src="ops1.png" alt="Logo" class="w-24 mx-auto" onerror="this.src='https://via.placeholder.com/120x35?text=LOGO'">
-            </div>
-            <div class="text-left mb-3">
-                <label class="text-slate-600 text-[8px] font-black uppercase mb-1 block">Otentikasi PIN</label>
-                <div class="input-wrapper-white">
-                    <input type="password" id="admin-pass" placeholder="••••••••">
+            <div id="login-content">
+                <div class="flex justify-between mb-3 px-1">
+                    <span class="text-slate-500 text-[7px] font-bold uppercase" id="login-date">DATE</span>
+                    <span class="text-slate-500 text-[7px] font-bold uppercase" id="login-clock">00:00:00 WIB</span>
                 </div>
-                <p id="error-msg" class="text-rose-500 text-[9px] mt-1 hidden font-bold text-center">PIN SALAH!</p>
+                <div class="mb-4">
+                    <img src="abdul.jpg" alt="Profile" class="profile-img">
+                    <h2 class="text-slate-800 font-extrabold text-base">Abdul Mudhar</h2>
+                    <p class="text-slate-500 text-[8px] font-bold uppercase">UPTD SDN Margantoko 2</p>
+                    <div class="w-8 h-0.5 bg-slate-200 mx-auto my-2"></div>
+                    <img src="ops1.png" alt="Logo" class="w-24 mx-auto" onerror="this.src='https://via.placeholder.com/120x35?text=LOGO'">
+                </div>
+                <div class="text-left mb-3">
+                    <label class="text-slate-600 text-[8px] font-black uppercase mb-1 block">Otentikasi PIN</label>
+                    <div class="input-wrapper-white">
+                        <input type="password" id="admin-pass" placeholder="••••••••">
+                    </div>
+                    <p id="error-msg" class="text-rose-500 text-[9px] mt-1 hidden font-bold text-center">PIN SALAH ATAU GAGAL KONEKSI!</p>
+                </div>
+                <button id="btn-submit" onclick="checkPassword()" class="btn-login-cyan shadow-lg">Login System</button>
             </div>
-            <button onclick="checkPassword()" class="btn-login-cyan shadow-lg">Login System</button>
         </div>
     </div>
 
@@ -198,57 +201,92 @@
         <iframe id="app-frame" src="" allow="clipboard-write"></iframe>
     </div>
 
-    <script>
-        // --- KONFIGURASI MAINTENANCE ---
-        const MAINTENANCE_MODE = false; // Ubah ke true untuk mengaktifkan
-        
-        const PIN_ADMIN = "opswilone";
-        const soundSuccess = document.getElementById('sound-success');
-        const soundError = document.getElementById('sound-error');
-        const soundClick = document.getElementById('sound-click');
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, get, child, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Fungsi Cek Maintenance Saat Load
-        function checkMaintenance() {
-            if (MAINTENANCE_MODE) {
-                document.getElementById('login-overlay').innerHTML = `
-                    <div class="glass-login-white login-card-container border-t-4 border-rose-500">
-                        <div class="py-10 px-4">
-                            <div class="text-rose-500 mb-4 animate-pulse">
-                                <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                                </svg>
-                            </div>
-                            <h2 class="text-slate-800 font-black text-xl uppercase tracking-tighter italic">System Maintenance</h2>
-                            <div class="w-10 h-0.5 bg-slate-200 mx-auto my-3"></div>
-                            <p class="text-slate-500 text-[9px] font-bold leading-relaxed uppercase">
-                                Mohon maaf, saat ini sistem sedang dalam pemeliharaan rutin.<br>Silakan coba beberapa saat lagi.
-                            </p>
+        const firebaseConfig = {
+  apiKey: "AIzaSyAEATGhio2xpxuK1y09lY7gaaN5eVlVzV0",
+  authDomain: "otp-multi.firebaseapp.com",
+  databaseURL: "https://otp-multi-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "otp-multi",
+  storageBucket: "otp-multi.firebasestorage.app",
+  messagingSenderId: "206567986298",
+  appId: "1:206567986298:web:08f3f3c88468b9c8b2d7c3",
+  measurementId: "G-EL4LWEWZFB"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- SISTEM MAINTENANCE MODE (REALTIME) ---
+        const maintenanceRef = ref(db, 'config/is_maintenance');
+        onValue(maintenanceRef, (snapshot) => {
+            const isMaintenance = snapshot.val();
+            const loginContent = document.getElementById('login-content');
+            
+            if (isMaintenance === true) {
+                loginContent.innerHTML = `
+                    <div class="py-10 px-4 border-t-4 border-rose-500 rounded-xl">
+                        <div class="text-rose-500 mb-4 animate-bounce">
+                            <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
                         </div>
+                        <h2 class="text-slate-800 font-black text-xl uppercase tracking-tighter italic">System Maintenance</h2>
+                        <div class="w-10 h-0.5 bg-slate-200 mx-auto my-3"></div>
+                        <p class="text-slate-500 text-[10px] font-bold leading-relaxed uppercase">
+                            Mohon maaf, saat ini sistem sedang dalam pemeliharaan rutin.<br>Silakan coba beberapa saat lagi.
+                        </p>
                     </div>
                 `;
+            } else {
+                // Refresh halaman jika maintenance dimatikan agar form login kembali
+                if (window.isFirstLoad === false) { location.reload(); }
+            }
+            window.isFirstLoad = false;
+        });
+        window.isFirstLoad = true;
+
+        // --- SISTEM LOGIN ---
+        window.checkPassword = async function() {
+            const input = document.getElementById('admin-pass').value;
+            const btn = document.getElementById('btn-submit');
+            const errorMsg = document.getElementById('error-msg');
+            
+            if(!input) return;
+            btn.innerText = "VERIFYING...";
+            btn.disabled = true;
+
+            try {
+                const dbRef = ref(db);
+                const snapshot = await get(child(dbRef, `config/admin_pin`));
+                
+                if (snapshot.exists() && input === snapshot.val()) {
+                    document.getElementById('sound-success').play();
+                    document.getElementById('login-overlay').style.display = 'none';
+                    document.getElementById('main-menu').classList.remove('hidden');
+                    document.body.classList.add('bg-dashboard-active');
+                    document.getElementById('canvas-bg').style.opacity = '0.2';
+                } else {
+                    throw new Error("Invalid");
+                }
+            } catch (err) {
+                document.getElementById('sound-error').play();
+                errorMsg.classList.remove('hidden');
+                document.getElementById('admin-pass').value = '';
+            } finally {
+                btn.innerText = "Login System";
+                btn.disabled = false;
             }
         }
-        window.onload = checkMaintenance;
+    </script>
 
+    <script>
+        // --- SCRIPT UI SEBELUMNYA (TIDAK BERUBAH) ---
+        const soundClick = document.getElementById('sound-click');
         function playClick() { soundClick.currentTime = 0; soundClick.play(); }
 
-        function checkPassword() {
-            const input = document.getElementById('admin-pass').value;
-            if(input === PIN_ADMIN) {
-                soundSuccess.play();
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('main-menu').classList.remove('hidden');
-                
-                document.body.classList.add('bg-dashboard-active');
-                document.getElementById('canvas-bg').style.opacity = '0.2';
-            } else {
-                soundError.play();
-                document.getElementById('error-msg').classList.remove('hidden');
-                document.getElementById('admin-pass').value = '';
-            }
-        }
-
-        // Script Particle Background
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
