@@ -20,7 +20,7 @@
 
         /* Latar belakang foto setelah login */
         .bg-dashboard-active {
-            background-image: url('ops.jpg'); /* GANTI DENGAN NAMA FILE FOTO ANDA */
+            background-image: url('ops.jpg'); 
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -111,7 +111,6 @@
         #app-frame { width: 100%; flex-grow: 1; border: none; background: white; }
         .nav-glass { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); }
 
-        /* Style khusus untuk Maintenance Overlay */
         #maintenance-screen {
             display: none;
             position: fixed;
@@ -140,8 +139,7 @@
                 </svg>
             </div>
             <h1 class="text-3xl font-black mb-2">MAINTENANCE</h1>
-            <p class="text-slate-400 text-sm font-medium mb-8">Maaf Aplikasi OTP Multi, sistem sedang dalam pemeliharaan berkala untuk meningkatkan layanan. Silakan kembali lagi nanti.</p>
-            <button onclick="location.reload()" class="px-6 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-slate-700 transition-all">Segarkan Halaman</button>
+            <p class="text-slate-400 text-sm font-medium">Maaf Aplikasi OTP Multi, sistem sedang dalam pemeliharaan berkala untuk meningkatkan layanan. Silakan kembali lagi nanti.</p>
         </div>
     </div>
 
@@ -229,14 +227,13 @@
 
     <script>
         // --- PENGATURAN MAINTENANCE ---
-        const IS_MAINTENANCE = false; // Ubah ke true untuk mengaktifkan, false untuk mematikan
+        const IS_MAINTENANCE = true; 
         
         const PIN_ADMIN = "opswilone";
         const soundSuccess = document.getElementById('sound-success');
         const soundError = document.getElementById('sound-error');
         const soundClick = document.getElementById('sound-click');
 
-        // Cek maintenance saat halaman dimuat
         if (IS_MAINTENANCE) {
             document.getElementById('maintenance-screen').style.display = 'flex';
             document.getElementById('login-overlay').style.display = 'none';
@@ -247,7 +244,6 @@
         function checkPassword() {
             if (IS_MAINTENANCE) {
                 soundError.play();
-                alert("Sistem sedang maintenance.");
                 return;
             }
 
@@ -266,7 +262,7 @@
             }
         }
 
-        // Script Particle Background
+        // Particle Background
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -309,7 +305,6 @@
         }
         animate();
 
-        // Fungsi Update Jam dan Tanggal
         function updateClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('id-ID', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
