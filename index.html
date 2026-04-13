@@ -138,7 +138,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
             </div>
-            <h1 class="text-3xl font-black mb-2">MAINTENANCE</h1>
+            <h1 class="text-3xl font-black mb-2 uppercase">Maintenance</h1>
             <p class="text-slate-400 text-sm font-medium">Maaf Aplikasi OTP Multi, sistem sedang dalam pemeliharaan berkala untuk meningkatkan layanan. Silakan kembali lagi nanti.</p>
         </div>
     </div>
@@ -226,14 +226,17 @@
     </div>
 
     <script>
-        // --- PENGATURAN MAINTENANCE ---
-        const IS_MAINTENANCE = true; 
+        // ==========================================
+        //         PENGATURAN MAINTENANCE
+        // ==========================================
+        const IS_MAINTENANCE = true; // Ubah ke true untuk AKTIF, false untuk MATI
         
         const PIN_ADMIN = "opswilone";
         const soundSuccess = document.getElementById('sound-success');
         const soundError = document.getElementById('sound-error');
         const soundClick = document.getElementById('sound-click');
 
+        // Proteksi awal saat halaman dimuat
         if (IS_MAINTENANCE) {
             document.getElementById('maintenance-screen').style.display = 'flex';
             document.getElementById('login-overlay').style.display = 'none';
@@ -242,6 +245,7 @@
         function playClick() { soundClick.currentTime = 0; soundClick.play(); }
 
         function checkPassword() {
+            // Cek status maintenance saat mencoba login
             if (IS_MAINTENANCE) {
                 soundError.play();
                 return;
@@ -262,7 +266,7 @@
             }
         }
 
-        // Particle Background
+        // --- Particle Background Logic ---
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -305,10 +309,10 @@
         }
         animate();
 
+        // --- Clock & Date Logic ---
         function updateClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('id-ID', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
-            
             const dayStr = now.toLocaleDateString('id-ID', { weekday: 'long' });
             const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
             const fullDate = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -322,6 +326,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // --- Navigation Logic ---
         function openLink(url) {
             document.getElementById('main-menu').classList.add('hidden');
             document.getElementById('app-container').style.display = 'flex';
