@@ -110,17 +110,58 @@
         #app-frame { width: 100%; flex-grow: 1; border: none; background: white; }
         .nav-glass { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); }
 
+        /* Style Baru untuk Maintenance */
         #maintenance-screen {
             display: none;
             position: fixed;
             inset: 0;
-            background-color: #3b82f6; 
+            background: linear-gradient(to bottom, #3b82f6, #93c5fd); 
             z-index: 999;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: white;
+            overflow: hidden;
+        }
+
+        .sun {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 100px;
+            height: 100px;
+            background: #ffcc00;
+            border-radius: 50%;
+            box-shadow: 0 0 50px #ffcc00;
+        }
+
+        .cloud-container {
+            position: absolute;
+            animation: moveClouds linear infinite;
+        }
+
+        .cloud-part {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            filter: blur(2px);
+        }
+
+        @keyframes moveClouds {
+            from { transform: translateX(-300px); }
+            to { transform: translateX(calc(100vw + 300px)); }
+        }
+
+        .maint-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
             text-align: center;
+            color: #1e3a8a;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 10;
         }
     </style>
 </head>
@@ -129,15 +170,35 @@
     <canvas id="canvas-bg"></canvas>
 
     <div id="maintenance-screen">
-        <div class="p-8 max-w-sm">
-            <div class="mb-6 inline-flex p-4 bg-white/20 rounded-full shadow-lg">
-                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
+        <div class="sun"></div>
+        
+        <div class="cloud-container" style="top: 15%; animation-duration: 30s;">
+            <div class="cloud-part w-20 h-16" style="left: 0; top: 10px;"></div>
+            <div class="cloud-part w-24 h-24" style="left: 30px; top: 0;"></div>
+            <div class="cloud-part w-20 h-16" style="left: 80px; top: 15px;"></div>
+        </div>
+
+        <div class="cloud-container" style="top: 40%; animation-duration: 50s; animation-delay: -10s;">
+            <div class="cloud-part w-28 h-20" style="left: 0; top: 0; opacity: 0.6;"></div>
+            <div class="cloud-part w-32 h-28" style="left: 40px; top: -10px; opacity: 0.6;"></div>
+        </div>
+
+        <div class="maint-card">
+            <h1 class="text-2xl font-bold mb-4">Halo Sahabat OPS...</h1>
+            <p class="text-xl font-medium mb-6">Info Aplikasi OTP Multi lagi maintenance ya.</p>
+            <div class="h-px bg-blue-900/10 w-full mb-6"></div>
+            <div class="italic space-y-2 opacity-80">
+                <p>Makasih banyak sudah sabar menanti.</p>
+                <p>Proses ini seperti menata hati agar lebih rapi.</p>
+                <p>InsyaAllah segera selesai dan membawa kabar gembira.</p>
             </div>
-            <h1 class="text-3xl font-black mb-2 uppercase tracking-tighter">Maintenance</h1>
-            <p class="text-white/90 text-sm font-medium">Maaf Aplikasi OTP Multi, sistem sedang dalam pemeliharaan berkala untuk meningkatkan layanan. Silakan kembali lagi nanti.</p>
+            <h2 class="text-xl font-bold mt-8">Tetap semangat! 🌟</h2>
+            <div class="mt-8 text-[10px] font-bold opacity-60">
+                Salam manis,<br>ADMIN APLIKASI OTP MULTI
+            </div>
+        </div>
+        <div class="absolute bottom-4 right-6 text-[10px] text-blue-900/50 font-bold">
+            Design by : @abulmudhar
         </div>
     </div>
 
@@ -224,7 +285,7 @@
     </div>
 
     <script>
-        const IS_MAINTENANCE = false; 
+        const IS_MAINTENANCE = true; // Ubah ke true untuk melihat layar baru
         const PIN_ADMIN = "opswilone";
         const soundSuccess = document.getElementById('sound-success');
         const soundError = document.getElementById('sound-error');
@@ -263,6 +324,7 @@
         function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', initCanvas);
         initCanvas();
+        
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -282,6 +344,7 @@
             }
         }
         for (let i = 0; i < 80; i++) particles.push(new Particle());
+
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach((p, index) => {
